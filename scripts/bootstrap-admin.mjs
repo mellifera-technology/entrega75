@@ -70,7 +70,7 @@ if (!apiary) {
 
 console.log('Admin inicializado correctamente');
 console.log('Usuario: admin');
-console.log('Contraseña: admin');
+console.log('Contraseña: definida por ADMIN_PASSWORD (no se muestra)');
 console.log(`Email interno: ${email}`);
 console.log(`Número de pedido admin: ${order.code}`);
-console.log('IMPORTANTE: cambiar ADMIN_PASSWORD antes de publicar el sitio.');
+console.log('IMPORTANTE: mantener ADMIN_PASSWORD privada y segura.');

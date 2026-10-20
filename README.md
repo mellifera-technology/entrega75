@@ -27,7 +27,7 @@ Implementación final del prototipo web + Supabase para el sistema de telemetrí
 - Recharts
 - Zod
 
-Para una puesta en marcha guiada, ver también `docs/SUPABASE_PASO_A_PASO.md`.
+Para una puesta en marcha guiada, ver también `docs/SUPABASE_PASO_A_PASO.md`. Para publicar en GitHub + Vercel, empezar por `docs/PUBLICAR_DESDE_GITHUB.md`.
 
 ## 1. Crear Supabase
 
