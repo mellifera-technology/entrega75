@@ -10,7 +10,7 @@ const num=(v:unknown):number|null=> v===null||v===undefined||v===''?null:(Number
 const bool=(v:unknown):boolean|null=> v==null||v===''?null:(v===true||v===1||v==='1'||v==='true'?true:v===false||v===0||v==='0'||v==='false'?false:null);
 const timePart=(d:Date,tz:string)=>{const p=new Intl.DateTimeFormat('en-US',{timeZone:tz,hour:'2-digit',hourCycle:'h23',month:'2-digit'}).formatToParts(d);return Object.fromEntries(p.map(x=>[x.type,x.value]));};
 const dew=(t:number|null,h:number|null):number|null=>{if(t===null||h===null||h<=0) return null;const g=Math.log(h/100)+17.625*t/(243.04+t);return 243.04*g/(17.625-g);};
-function evaluate(t:number|null,h:number|null,activity:boolean|null,swarm:boolean|null,tilt:boolean|null,season:string,band:string,valid:boolean,history:any[]){
+function evaluate(t:number|null,h:number|null,acoustic:number|null,activity:boolean|null,absenceStreak:number|null,swarm:boolean|null,tilt:boolean|null,season:string,band:string,valid:boolean,history:any[]){
   const dp=dew(t,h);const margin=(dp!==null&&t!==null)?t-dp:null;
   const state=(s:string,title:string|null,msg:string|null)=>({state:s,title,message:msg,dew_point_c:dp,dew_point_margin_c:margin});
   if(!valid||t===null||h===null)return state('white','Datos insuficientes','Medición incompleta o fuera del rango del sensor.');
@@ -27,8 +27,8 @@ function evaluate(t:number|null,h:number|null,activity:boolean|null,swarm:boolea
     const variance=values.reduce((a:number,b:number)=>a+(b-mean)**2,0)/(values.length-1);
     return variance>0.00001&&Math.abs((val-mean)/Math.sqrt(variance))>2.5;
   };
-  if(zUnusual('temperature_c',t)||zUnusual('humidity_rh',h))return state('yellow','Variación estadística','Cambio inusual frente al historial comparable.');
-  if(summer&&(band==='manana'||band==='tarde')&&activity===false)return state('yellow','Poca actividad de piquera','Revisar evolución de actividad y condiciones climáticas.');
+  if(zUnusual('temperature_c',t)||zUnusual('humidity_rh',h)||zUnusual('acoustic_energy',acoustic))return state('yellow','Variación estadística','Cambio inusual frente al historial comparable.');
+  if(summer&&(band==='manana'||band==='tarde')&&activity===false&&(absenceStreak??0)>=10)return state('yellow','Poca actividad de piquera','Revisar evolución de actividad y condiciones climáticas.');
   if(summer&&swarm)return state('yellow','Componente acústica contextual','Se reporta energía en la banda asociada a enjambrazón; no es diagnóstico.');
   return state('green',null,null);
 }
@@ -39,7 +39,7 @@ Deno.serve(async(req)=>{
     if(!url||!key)return response({error:'Clave de servicio no configurada'},503);
     const body=await req.json();
     const uid=String(req.headers.get('x-mellifera-mother')||body.MOTHER_UID||'').trim();
-    const api=String(req.headers.get('x-mellifera-key')||'').trim();
+    const api=String(req.headers.get('x-mellifera-key')||body.DEVICE_KEY||'').trim();
     if(!uid||!api)return response({error:'Credenciales de Nodo Madre requeridas'},401);
     const {data:ident,error:authErr}=await db.rpc('mellifera_resolve_mother',{p_uid:uid,p_key:api});
     if(authErr)throw authErr;
@@ -78,15 +78,15 @@ Deno.serve(async(req)=>{
       const t=num(input.DHT11_T),h=num(input.DHT11_H),ac=num(input.MAX4466_E),act=bool(input.TCRT5000_ACT),swarm=bool(input.MAX4466_SWARM_BAND),angle=num(input.MPU6050_DELTA_DEG);
       const tilt=angle!==null&&num(child.critical_tilt_deg)!==null?angle>=Number(child.critical_tilt_deg):bool(input.MPU6050_TILT);
       const valid=input.is_valid!==false&&(t===null||(t>=0&&t<=50))&&(h===null||(h>=20&&h<=90))&&(ac===null||ac>=0);
-      const {data:history,error:he}=await db.from('telemetry').select('temperature_c,humidity_rh').eq('child_node_id',child.id).eq('season',season).eq('time_band',band).eq('is_valid',true).lt('measured_at',measured.toISOString()).order('measured_at',{ascending:false}).limit(60);
+      const {data:history,error:he}=await db.from('telemetry').select('temperature_c,humidity_rh,acoustic_energy').eq('child_node_id',child.id).eq('season',season).eq('time_band',band).eq('is_valid',true).lt('measured_at',measured.toISOString()).order('measured_at',{ascending:false}).limit(60);
       if(he)throw he;
-      const a=evaluate(t,h,act,swarm,tilt,season,band,valid,history||[]);
+      const a=evaluate(t,h,ac,act,num(input.TCRT5000_NO_ACT_STREAK),swarm,tilt,season,band,valid,history||[]);
       // raw_payload conserva la información recibida EXCEPTO identificadores internos de usuario.
       const redact=(v:unknown,depth=0):unknown=>{
         if(depth>10)return '[profundidad omitida]';
         if(Array.isArray(v))return v.map(x=>redact(x,depth+1));
         if(v&&typeof v==='object')return Object.fromEntries(Object.entries(v as Record<string,unknown>)
-          .filter(([k])=>!/^(user_id|public_id|client_internal_id|api_key|secret|service_role)$/i.test(k))
+          .filter(([k])=>!/^(user_id|public_id|client_internal_id|api_key|device_key|secret|service_role)$/i.test(k))
           .map(([k,x])=>[k,redact(x,depth+1)]));
         return v;
       };
