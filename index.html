@@ -14,6 +14,10 @@
 .brand-logo-footer{width:181px;height:65px;}
 @media(max-width:780px){.brand-logo{width:147px;height:62px}.brand-logo-footer{width:170px;height:62px}}
 @media(max-width:390px){.brand-logo{width:130px;height:57px}}
+#registerProgress{font-size:13px;line-height:1.8;color:#f2dbaf;min-height:46px}
+#registerProgress.danger{border-color:#bb5959;color:#ffd2ce;background:#361c20}
+#registerProgress.ok{border-color:#44865f;color:#d2fbe2;background:#133b30}
+#verifyOrderBtn{margin-top:-4px}
 </style>
 </head>
 <body>
@@ -27,10 +31,35 @@
 <footer class="site-footer"><div class="container"><a href="#inicio" class="brand"><img class="brand-logo brand-logo-footer" src="assets/mellifera-logo.png" alt="MELLIFERA TECHNOLOGY" width="195" height="83"></a><span>© <span id="year"></span> · Tecnología aplicada a la apicultura · Proyecto de ingeniería</span></div></footer>
 </main>
 <section id="application" class="app hide"><aside class="sidebar" id="appSidebar"></aside><div class="content" id="appContent"></div></section>
-<div class="modal-wrap hide" id="authModal" role="dialog" aria-modal="true" aria-labelledby="authTitle"><div class="modal"><div class="modal-head"><div><div class="eyebrow">Acceso exclusivo · MELLIFERA</div><h2 id="authTitle">Iniciar sesión</h2><p class="muted small" id="authSubtitle" style="line-height:1.8;margin:0">Accedé al seguimiento de tus colmenas.</p></div><button class="close" type="button" data-close-auth aria-label="Cerrar">×</button></div><div class="tabs" id="authTabs"><button class="active" type="button" data-auth-tab="login">Iniciar sesión</button><button type="button" data-auth-tab="register">Crear cuenta</button></div><form class="form" id="loginForm"><div class="field"><label for="loginEmail">Correo electrónico o usuario administrador</label><input id="loginEmail" autocomplete="username" placeholder="usuario@correo.com o admin" required></div><div class="field"><label for="loginPassword">Contraseña</label><input id="loginPassword" type="password" autocomplete="current-password" placeholder="Tu contraseña" required></div><button class="btn primary" type="submit">Ingresar al panel ↗</button><div class="divider-text">O ingresá con Google</div><button class="google-button" data-google="login" type="button"><span class="google-g">G</span> Continuar con Google</button><p class="muted small" style="margin:0">Si ya activaste tu pedido, no volvés a necesitarlo para ingresar.</p></form><form class="form hide" id="registerForm"><div class="tip" style="margin-bottom:3px">1. Verificamos tu pedido una sola vez. 2. Creás tu cuenta. 3. Confirmás el correo si Supabase lo solicita. Luego ingresás normalmente, sin volver a usar el pedido.</div><div class="field"><label for="regOrder">Número de pedido único *</label><input id="regOrder" placeholder="MEL-ORD-..." maxlength="100" autocomplete="off" required></div><div class="field"><label for="regName">Tu nombre</label><input id="regName" autocomplete="name" placeholder="Nombre y apellido" required></div><div class="field"><label for="regEmail">Correo electrónico</label><input id="regEmail" type="email" autocomplete="email" placeholder="tu@correo.com" required></div><div class="field"><label for="regPassword">Elegí una contraseña (mínimo 8 caracteres)</label><input id="regPassword" type="password" minlength="8" autocomplete="new-password" placeholder="••••••••" required></div><button class="btn primary" id="registerSubmit" type="submit">Validar pedido y crear cuenta ↗</button><div class="divider-text">O crear cuenta con Google</div><button class="google-button" data-google="register" type="button"><span class="google-g">G</span> Vincular pedido con Google</button><p class="muted small" style="margin:0">El pedido solo se consume al activar tu cuenta. Si se solicita, confirmá primero tu correo.</p></form><div class="error-line" id="authFeedback" aria-live="polite"></div></div></div>
+<div class="modal-wrap hide" id="authModal" role="dialog" aria-modal="true" aria-labelledby="authTitle"><div class="modal"><div class="modal-head"><div><div class="eyebrow">Acceso exclusivo · MELLIFERA</div><h2 id="authTitle">Iniciar sesión</h2><p class="muted small" id="authSubtitle" style="line-height:1.8;margin:0">Accedé al seguimiento de tus colmenas.</p></div><button class="close" type="button" data-close-auth aria-label="Cerrar">×</button></div><div class="tabs" id="authTabs"><button class="active" type="button" data-auth-tab="login">Iniciar sesión</button><button type="button" data-auth-tab="register">Crear cuenta</button></div><form class="form" id="loginForm"><div class="field"><label for="loginEmail">Correo electrónico o usuario administrador</label><input id="loginEmail" autocomplete="username" placeholder="usuario@correo.com o admin" required></div><div class="field"><label for="loginPassword">Contraseña</label><input id="loginPassword" type="password" autocomplete="current-password" placeholder="Tu contraseña" required></div><button class="btn primary" type="submit">Ingresar al panel ↗</button><div class="divider-text">O ingresá con Google</div><button class="google-button" data-google="login" type="button"><span class="google-g">G</span> Continuar con Google</button><p class="muted small" style="margin:0">Si ya activaste tu pedido, no volvés a necesitarlo para ingresar.</p></form><form class="form hide" id="registerForm"><div class="tip" style="margin-bottom:3px">1. Verificamos tu pedido una sola vez. 2. Creás tu cuenta. 3. Confirmás el correo si Supabase lo solicita. Luego ingresás normalmente, sin volver a usar el pedido.</div><div class="field"><label for="regOrder">Número de pedido único *</label><input id="regOrder" placeholder="MEL-ORD-..." maxlength="100" autocomplete="off" required></div><button class="btn ghost micro" id="verifyOrderBtn" type="button" style="align-self:start">Comprobar pedido ↗</button><div class="field"><label for="regName">Tu nombre</label><input id="regName" autocomplete="name" placeholder="Nombre y apellido" required></div><div class="field"><label for="regEmail">Correo electrónico</label><input id="regEmail" type="email" autocomplete="email" placeholder="tu@correo.com" required></div><div class="field"><label for="regPassword">Elegí una contraseña (mínimo 8 caracteres)</label><input id="regPassword" type="password" minlength="8" autocomplete="new-password" placeholder="••••••••" required></div><div id="registerProgress" class="tip hide" role="status" aria-live="polite" style="margin:0;white-space:pre-wrap"></div><button class="btn primary" id="registerSubmit" type="submit">Validar pedido y crear cuenta ↗</button><div id="emailVerifyBox" class="hide" style="border:1px solid #d2aa5e88;border-radius:14px;padding:15px;background:#1b2725"><div class="eyebrow" style="margin-bottom:10px">Último paso: confirmar el correo</div><p class="small muted" style="margin-top:0;line-height:1.7">Buscá el correo de Supabase, también en Spam. Si recibiste un enlace, hacé clic. Si recibiste un código de 6 cifras, ingresalo acá.</p><div class="field"><label for="regOtp">Código recibido por correo (opcional)</label><input type="text" id="regOtp" inputmode="numeric" autocomplete="one-time-code" maxlength="8" placeholder="123456"></div><div style="display:flex;flex-wrap:wrap;gap:8px;margin-top:10px"><button type="button" class="btn primary micro" id="confirmEmailCodeBtn">Confirmar código</button><button type="button" class="btn ghost micro" id="resendConfirmationBtn">Reenviar correo</button><button type="button" class="btn secondary micro" id="iConfirmedEmailBtn">Ya confirmé el enlace</button></div></div><div class="divider-text">O crear cuenta con Google</div><button class="google-button" data-google="register" type="button"><span class="google-g">G</span> Vincular pedido con Google</button><p class="muted small" style="margin:0">El pedido solo se consume al activar tu cuenta. Si se solicita, confirmá primero tu correo.</p></form><div class="error-line" id="authFeedback" aria-live="polite"></div></div></div>
 <div id="toast" class="toast hide" role="status" aria-live="polite"></div>
+<script>
+// Detecta fallas de carga de JS y las muestra al visitante en vez de dejar botones inertes.
+window.__melliferaJsReady = false;
+function melliferaScriptWarning(message) {
+  const modal = document.getElementById('authModal');
+  const error = document.getElementById('authFeedback');
+  if (modal && error) {
+    modal.classList.remove('hide');
+    error.textContent = message;
+    error.style.whiteSpace = 'pre-wrap';
+  }
+}
+window.addEventListener('error', (ev) => {
+  const msg = String(ev.message || '');
+  if (!window.__melliferaJsReady && /script|import|module|fetch|syntax|load/i.test(msg)) {
+    melliferaScriptWarning('La página no pudo cargar su conexión con Supabase: ' + msg + '. Recargá con Ctrl+F5.');
+  }
+});
+setTimeout(() => {
+  if (!window.__melliferaJsReady) melliferaScriptWarning('La aplicación no terminó de iniciar. Revisá la conexión a Internet y recargá con Ctrl+F5. Si persiste, el navegador está bloqueando el módulo de Supabase.');
+}, 14000);
+</script>
 <script type="module">
-import {createClient} from 'https://esm.sh/@supabase/supabase-js@2.49.8';
+// Carga con respaldo para que el registro no quede inerte si falla un CDN.
+const supabaseModule = await import('https://esm.sh/@supabase/supabase-js@2.49.8')
+  .catch(async () => import('https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2.49.8/+esm'));
+const {createClient} = supabaseModule;
 // ÚNICA clave Supabase incluida en el HTML: anon/public (de acceso público).
 // JAMÁS agregar service_role ni sb_secret aquí. Si rotás las claves, reemplazá PUBLIC_KEY.
 const SUPABASE_URL='https://zvtljoaecgtdnzloksjo.supabase.co';
@@ -50,7 +79,20 @@ function tell(msg,bad=false){const el=E('toast');el.textContent=msg;el.classList
 const sLabel={green:'Normal',yellow:'Seguimiento',red:'Alerta',white:'Sin evaluar'};
 const status=(v)=>`<span class="status ${safe(v||'white')}">${safe(sLabel[v]||'Sin datos')}</span>`;
 const empty=(text)=>`<div class="empty"><div class="symbol">⬡</div>${safe(text)}</div>`;
-function setAuth(mode){E('authModal').classList.remove('hide');E('authFeedback').textContent='';E('authTitle').textContent=mode==='login'?'Bienvenida a tu apiario':'Activá tu MELLIFERA';E('authSubtitle').textContent=mode==='login'?'Ingresá con tu cuenta habitual.':'Ingresá tu número de pedido una sola vez.';E('loginForm').classList.toggle('hide',mode!=='login');E('registerForm').classList.toggle('hide',mode!=='register');for(const b of E('authTabs').querySelectorAll('button'))b.classList.toggle('active',b.dataset.authTab===mode);}
+function setAuth(mode){
+ E('authModal').classList.remove('hide');E('authFeedback').textContent='';
+ E('authTitle').textContent=mode==='login'?'Bienvenida a tu apiario':'Activá tu MELLIFERA';
+ E('authSubtitle').textContent=mode==='login'?'Ingresá con tu cuenta habitual.':'Ingresá tu número de pedido una sola vez.';
+ E('loginForm').classList.toggle('hide',mode!=='login');E('registerForm').classList.toggle('hide',mode!=='register');
+ for(const b of E('authTabs').querySelectorAll('button'))b.classList.toggle('active',b.dataset.authTab===mode);
+ if(mode==='register'&&localStorage.getItem('mellifera_pending_order')&&localStorage.getItem('mellifera_pending_email')){
+   E('regOrder').value=localStorage.getItem('mellifera_pending_order');
+   E('regEmail').value=localStorage.getItem('mellifera_pending_email');
+   E('regName').value=localStorage.getItem('mellifera_pending_name')||'';
+   showEmailVerification();
+   registrationProgress('Tenés un registro pendiente. Si recibiste el correo de confirmación, abrí el enlace o ingresá su código. Si ya confirmaste, iniciá sesión para terminar de activar tu pedido.');
+ }
+}
 function closeAuth(){E('authModal').classList.add('hide');E('authFeedback').textContent='';}
 function feedback(msg){E('authFeedback').textContent=msg;}
 // El alta usa RPC seguras de Supabase: NO requiere desplegar mellifera-auth.
@@ -68,6 +110,12 @@ function registrationError(error){
     return 'Confirmá tu dirección desde el enlace recibido por correo e intentá nuevamente.';
   if(/already registered|user already registered|already been registered/i.test(message))
     return 'Ese correo ya tiene una cuenta en Supabase. Iniciá sesión y activá el pedido con tu cuenta existente.';
+  if(/email address not authorized|recipient address not authorized|address not authorized/i.test(message))
+    return 'Supabase no permite enviar el correo de confirmación a esta dirección con el SMTP de prueba. Configurá un SMTP propio en Authentication → SMTP Settings (para usar cuentas reales).';
+  if(/signup is disabled|signups not allowed|signups disabled/i.test(message))
+    return 'Supabase tiene deshabilitado el registro de usuarios. Revisá Authentication → Sign In / Providers → Email.';
+  if(/otp expired|token has expired|invalid otp|otp.*invalid/i.test(message))
+    return 'El código venció o es incorrecto. Solicitá un correo nuevo y probá otra vez.';
   if(/rate limit|too many requests|email rate limit/i.test(message))
     return 'Supabase limitó los correos temporalmente. Esperá unos minutos y probá de nuevo.';
   return message;
@@ -95,8 +143,37 @@ async function edgeAuth(action,order,extra={}){
   throw Error('Operación no permitida.');
 }
 function pendingOrder(){return localStorage.getItem('mellifera_pending_order')||'';}
-function savePending(o,n){localStorage.setItem('mellifera_pending_order',o.toUpperCase().trim());localStorage.setItem('mellifera_pending_name',n||'');}
-function clearPending(){localStorage.removeItem('mellifera_pending_order');localStorage.removeItem('mellifera_pending_name');}
+function savePending(o,n,email=''){localStorage.setItem('mellifera_pending_order',o.toUpperCase().trim());localStorage.setItem('mellifera_pending_name',n||'');if(email)localStorage.setItem('mellifera_pending_email',email);}
+function clearPending(){localStorage.removeItem('mellifera_pending_order');localStorage.removeItem('mellifera_pending_name');localStorage.removeItem('mellifera_pending_email');}
+function registrationProgress(message, level='info') {
+ const box=E('registerProgress');if(!box)return;
+ box.classList.remove('hide','danger','ok');if(level==='error')box.classList.add('danger');if(level==='ok')box.classList.add('ok');
+ box.textContent=message;
+ feedback(message);
+}
+function showEmailVerification() {E('emailVerifyBox').classList.remove('hide');}
+function hideEmailVerification() {E('emailVerifyBox').classList.add('hide');}
+async function confirmSignupToken() {
+ const email=String(localStorage.getItem('mellifera_pending_email')||E('regEmail').value||'').trim();
+ const token=E('regOtp').value.trim();
+ if(!email)throw Error('Ingresá tu correo para confirmar la cuenta.');
+ if(!/^[0-9]{6,8}$/.test(token))throw Error('Ingresá el código numérico que llegó por correo.');
+ registrationProgress('Confirmando código con Supabase…');
+ const r=await sb.auth.verifyOtp({email,token,type:'email'});
+ if(r.error)throw r.error;
+ registrationProgress('Correo confirmado. Vinculando el pedido…','ok');
+ const done=await tryClaim();
+ if(!done)throw Error('La cuenta fue confirmada, pero falta activar el pedido. Revisá el mensaje anterior.');
+ hideEmailVerification();await bootstrap();
+}
+async function resendSignupEmail() {
+ const email=String(localStorage.getItem('mellifera_pending_email')||E('regEmail').value||'').trim();
+ if(!email)throw Error('Ingresá primero el correo usado en el registro.');
+ registrationProgress('Solicitando nuevo correo…');
+ const {error}=await sb.auth.resend({type:'signup',email,options:{emailRedirectTo:window.location.href.split('#')[0]}});
+ if(error)throw error;
+ registrationProgress('Supabase aceptó el reenvío. Revisá tu bandeja y Spam. Si no llega, comprobá la configuración de correo en Supabase.','ok');
+}
 async function checkOrder(order){const r=await edgeAuth('check',order);if(!r.available)throw Error('El número de pedido no existe o ya fue utilizado.');}
 async function tryClaim(){
   const o=pendingOrder();if(!o)return false;
@@ -118,7 +195,7 @@ async function bootstrap(){
     closeAuth();E('landing').classList.add('hide');E('application').classList.remove('hide');E('publicNav').classList.add('hide');E('sessionBadge').classList.remove('hide');E('sessionBtn').textContent='Cerrar sesión';
     if(me.role==='admin'){const r=await sb.rpc('mellifera_admin_users');if(!r.error)adminUsers=r.data||[];}
     await loadData();render();
-  }catch(e){console.error(e);tell('Error de conexión: '+e.message,true);}
+  }catch(e){console.error(e);registrationProgress('No se pudo iniciar el panel: '+registrationError(e),'error');tell('Error de conexión: '+registrationError(e),true);}
 }
 function ownerId(){return me?.role==='admin'&&selectedOwner?selectedOwner:session?.user?.id;}
 async function readRows(table,cols,filters){let query=sb.from(table).select(cols);if(filters)query=filters(query);const r=await query;if(r.error)throw r.error;return r.data||[];}
@@ -179,7 +256,42 @@ function sampleSize(N){N=Math.max(1,Math.min(100000,Math.floor(Number(N)||1)));i
 function updateCalc(){const N=Math.max(1,Math.floor(Number(E('calcHives').value)||1)),n=sampleSize(N);E('calcResult').textContent=n.toLocaleString('es-AR');E('calcDetail').textContent=`Para ${N.toLocaleString('es-AR')} colmenas, se recomiendan ${n.toLocaleString('es-AR')} Nodos Hijo (${fmt(100*n/N,1)} % de cobertura).`;}
 function nativeForm(form){return Object.fromEntries(new FormData(form).entries());}
 function busy(form,is){form.classList.toggle('loading',is);for(const button of form.querySelectorAll('button[type=submit]'))button.disabled=is;}
-async function handleRegister(e){e.preventDefault();const f=e.currentTarget,d=nativeForm(f);busy(f,true);feedback('Validando tu pedido…');try{const order=String(d.order||E('regOrder').value||'').trim().toUpperCase();const name=E('regName').value.trim();const email=E('regEmail').value.trim();const password=E('regPassword').value;const {data:authenticated}=await sb.auth.getSession();if(!authenticated.session&&password.length<8)throw Error('La contraseña debe tener al menos 8 caracteres.');await checkOrder(order);savePending(order,name);if(authenticated.session){const ok=await tryClaim();if(ok)await bootstrap();return;}const r=await sb.auth.signUp({email,password,options:{data:{full_name:name},emailRedirectTo:window.location.origin+window.location.pathname}});if(r.error)throw r.error;if(r.data.user?.identities?.length===0)throw Error('Ese correo ya está registrado. Iniciá sesión con él.');if(r.data.session){session=r.data.session;const ok=await tryClaim();if(ok){await bootstrap();return;}}feedback('Revisá tu correo y confirmá la cuenta. Luego volvé a esta página: se activará el pedido automáticamente.');tell('Se envió el correo de confirmación.');}catch(err){const msg=registrationError(err);feedback(msg);tell(msg,true);}finally{busy(f,false);}}
+async function handleRegister(e){
+ e.preventDefault();const f=e.currentTarget;busy(f,true);
+ const order=String(E('regOrder').value||'').trim().toUpperCase();
+ const name=E('regName').value.trim();
+ const email=E('regEmail').value.trim();
+ const password=E('regPassword').value;
+ try{
+   if(!order)throw Error('Ingresá el número de pedido.');
+   registrationProgress('1/3 · Comprobando el número de pedido con Supabase…');
+   const existing=await sb.auth.getSession();if(existing.error)throw existing.error;
+   if(!existing.data.session&&(!email||!name||password.length<8))throw Error('Completá nombre, correo y contraseña de al menos 8 caracteres.');
+   await checkOrder(order);
+   registrationProgress('1/3 · Pedido disponible. Iniciando el alta de la cuenta…','ok');
+   savePending(order,name,email);
+   if(existing.data.session){
+     registrationProgress('2/3 · Sesión encontrada. Asociando el pedido a tu cuenta…');
+     if(await tryClaim()){registrationProgress('3/3 · Cuenta activada correctamente.','ok');await bootstrap();}
+     else throw Error('No se pudo activar el pedido. Revisá el mensaje mostrado.');
+     return;
+   }
+   registrationProgress('2/3 · Registrando correo y contraseña en Supabase…');
+   const r=await sb.auth.signUp({email,password,options:{data:{full_name:name},emailRedirectTo:window.location.href.split('#')[0]}});
+   if(r.error)throw r.error;
+   if(!r.data.user)throw Error('Supabase no devolvió una cuenta. Comprobá que el registro por correo esté habilitado.');
+   if(r.data.user.identities?.length===0)throw Error('Este correo ya fue registrado. Usá Iniciar sesión con tu contraseña para completar la activación.');
+   if(r.data.session){
+     registrationProgress('3/3 · Cuenta creada. Activando el pedido…');
+     if(await tryClaim()){registrationProgress('3/3 · ¡Cuenta activada! Ingresando al panel…','ok');await bootstrap();}
+     else throw Error('El usuario fue creado, pero no se pudo asignar el pedido. Iniciá sesión con este correo e intentá activarlo.');
+     return;
+   }
+   showEmailVerification();
+   registrationProgress('2/3 · Supabase recibió el alta de '+email+'. Falta confirmar el correo para completar la activación.\nRevisá Bandeja de entrada y Spam. Si llegó un enlace, abrilo; si llegó un código, escribilo abajo. Después se asignará automáticamente el pedido '+order+'.','ok');
+ }catch(err){const msg=registrationError(err);registrationProgress('No se completó el registro: '+msg,'error');tell(msg,true);console.error('[MELLIFERA registro]',err);}
+ finally{busy(f,false);}
+}
 async function handleLogin(e){e.preventDefault();const f=e.currentTarget;busy(f,true);feedback('Iniciando sesión…');try{let email=E('loginEmail').value.trim();if(email.toLowerCase()==='admin')email='admin@mellifera.local';const {error}=await sb.auth.signInWithPassword({email,password:E('loginPassword').value});if(error)throw error;await bootstrap();}catch(err){feedback('No se pudo ingresar: '+registrationError(err));}finally{busy(f,false);}}
 async function handleGoogle(mode){try{if(mode==='register'){const order=E('regOrder').value.trim();if(!order)throw Error('Primero ingresá tu número de pedido.');await checkOrder(order);savePending(order,E('regName').value.trim());}const {error}=await sb.auth.signInWithOAuth({provider:'google',options:{redirectTo:window.location.origin+window.location.pathname}});if(error)throw error;}catch(err){feedback(registrationError(err));}}
 // Delegación de eventos para elementos creados dinámicamente.
@@ -189,6 +301,27 @@ if(t.matches('[data-open-register]'))return setAuth('register');
 if(t.matches('[data-close-auth]'))return closeAuth();
 if(t.dataset.authTab)return setAuth(t.dataset.authTab);
 if(t.dataset.google)return handleGoogle(t.dataset.google);
+if(t.id==='verifyOrderBtn'){
+  const order=E('regOrder').value.trim();
+  try{registrationProgress('Verificando el pedido en Supabase…');await checkOrder(order);registrationProgress('El pedido '+order.toUpperCase()+' existe y está disponible para registrar una cuenta.','ok');}
+  catch(err){registrationProgress('No se puede utilizar el pedido: '+registrationError(err),'error');}
+  return;
+}
+if(t.id==='confirmEmailCodeBtn'){
+  try{await confirmSignupToken();}catch(err){registrationProgress('Error al confirmar: '+registrationError(err),'error');}
+  return;
+}
+if(t.id==='resendConfirmationBtn'){
+  try{await resendSignupEmail();}catch(err){registrationProgress('No pudo reenviarse el correo: '+registrationError(err),'error');}
+  return;
+}
+if(t.id==='iConfirmedEmailBtn'){
+  registrationProgress('Comprobando si tu cuenta quedó confirmada…');
+  try{await bootstrap();if(!me)registrationProgress('Si ya confirmaste el enlace en otro navegador, ingresá con tu correo y contraseña. La cuenta se activará al iniciar sesión.');}
+  catch(err){registrationProgress(registrationError(err),'error');}
+  return;
+}
+
 if(t.id==='sessionBtn'){if(me){await sb.auth.signOut();entryHomepage();window.scrollTo(0,0);}else setAuth('login');return;}
 if(t.dataset.logout!==undefined){await sb.auth.signOut();entryHomepage();return;}
 if(t.dataset.tab){if(['admin','accounting'].includes(t.dataset.tab)&&me?.role!=='admin')return;tab=t.dataset.tab;if(tab==='accounting'||tab==='admin')await loadAdmin();navigate(tab);return;}
@@ -222,6 +355,7 @@ E('authModal').addEventListener('click',e=>{if(e.target===E('authModal'))closeAu
 E('calcHives').addEventListener('input',updateCalc);E('year').textContent=new Date().getFullYear();updateCalc();
 // Eventos de sesión: evita mostrar datos a usuarios sin pedido validado.
 sb.auth.onAuthStateChange((event)=>{if(event==='SIGNED_OUT')entryHomepage();else if(event==='SIGNED_IN'&&session?.user?.id!==undefined){/* La carga inicial o submit controla la transición. */}});
+window.__melliferaJsReady = true;
 await bootstrap();
 </script>
 </body>
